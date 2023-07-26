@@ -31,9 +31,9 @@ public class AccountDAO {
         String query = "SELECT * FROM account_tb WHERE account_number = ?";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, accountNumber);
-            try (ResultSet resultSet = statement.executeQuery()) {
-                if (resultSet.next()) {
-                    return buildAccountFromResultSet(resultSet);
+            try (ResultSet rs = statement.executeQuery()) {
+                if (rs.next()) {
+                    return buildAccountFromResultSet(rs);
                 }
             }
         }
@@ -44,8 +44,8 @@ public class AccountDAO {
     public List<Account> getAllAccounts() throws SQLException {
         List<Account> accounts = new ArrayList<>();
         String query = "SELECT * FROM account_tb";
-        try (Statement statement = connection.createStatement()) {
-            try(ResultSet resultSet = statement.executeQuery(query)){
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            try(ResultSet resultSet = statement.executeQuery()){
                 while (resultSet.next()) {
                     Account account = buildAccountFromResultSet(resultSet);
                     accounts.add(account);
